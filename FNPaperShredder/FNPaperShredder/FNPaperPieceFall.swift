@@ -15,12 +15,11 @@ extension UIView {
         let emitter = CAEmitterLayer()
         emitter.frame = rect
         layer.addSublayer(emitter)
-        emitter.emitterShape = kCAEmitterLayerRectangle
-        emitter.emitterPosition = CGPointMake(rect.width/2, rect.height/2)
+        emitter.emitterShape = .rectangle
+        emitter.emitterPosition = CGPoint.init(x: rect.width/2, y: rect.height/2)
         emitter.emitterSize = rect.size
-        
         let emitterCell = CAEmitterCell()
-        emitterCell.contents = UIImage(named: "paperPiece")!.CGImage
+        emitterCell.contents = UIImage(named: "paperPiece")!.cgImage
         emitterCell.birthRate = Float(50)
         emitterCell.lifetime = 0.7
         emitterCell.lifetimeRange = 0.7
@@ -29,9 +28,9 @@ extension UIView {
         emitterCell.yAcceleration = 300.0
         emitterCell.xAcceleration = 0
         emitterCell.velocity = -10.0
-        emitterCell.spinRange = CGFloat(2 * M_PI);
-        emitterCell.spin = CGFloat(2 * M_PI);
-        emitterCell.color = UIColor.init(white: 1, alpha: 1).CGColor
+        emitterCell.spinRange = CGFloat(2 * Double.pi);
+        emitterCell.spin = CGFloat(2 * Double.pi);
+        emitterCell.color = UIColor.init(white: 1, alpha: 1).cgColor
         
         emitterCell.scale = 0.7
         emitterCell.scaleRange = 0.7
@@ -40,19 +39,14 @@ extension UIView {
         emitterCell.alphaRange = 1.0
         emitterCell.alphaSpeed = 0
         
-        self.backgroundColor = UIColor.clearColor()
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
-            UIView.animateWithDuration(1.2, animations: {
+        self.backgroundColor = .clear
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1 * Double(NSEC_PER_SEC)) {
+            UIView.animate(withDuration: 1.2, animations: {
                 self.alpha = 0.99
-                }, completion: { (fff) in
-                    UIView.animateWithDuration(0.7, animations: {
-                        self.alpha = 0
-                        }, completion: { (fff) in
-                            emitter.removeFromSuperlayer()
-                    })
+            }, completion: { (fff) in
+                emitter.removeFromSuperlayer()
             })
-        })
-        
+        }
     }
     
 }

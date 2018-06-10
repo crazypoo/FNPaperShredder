@@ -21,12 +21,12 @@ class FNPaperShredder: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initView(frame)
+        initView(frame: frame)
     }
     
     func initView(frame: CGRect) {
         paper = UIView.init(frame: CGRect.init(x: (frame.width - 146) / 2, y: 0, width: 146, height: 75))
-        paper.backgroundColor = UIColor.whiteColor()
+        paper.backgroundColor = .white
         addSubview(paper)
         
         bars = NSMutableArray.init(array: [])
@@ -34,9 +34,9 @@ class FNPaperShredder: UIView {
             let interval = (146 - 8) / 11
             let originX = (frame.width - 146) / 2 - 4 + CGFloat(i * interval)
             let paperBar = FNPaperBar.init(frame: CGRect.init(x: originX, y: 146 - 50, width: 20, height: 50))
-            paperBar.backgroundColor = UIColor.whiteColor()
+            paperBar.backgroundColor = .white
             addSubview(paperBar)
-            bars.addObject(paperBar)
+            bars.add(paperBar)
         }
         
         paperPieceFaller = UIView.init(frame: CGRect.init(x: (frame.width - 126) / 2, y: 110, width: 126, height: 5))
@@ -60,31 +60,37 @@ class FNPaperShredder: UIView {
         
         let textLabel = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: darkRedPart.frame.width, height: 20))
         textLabel.text = "Deleting"
-        textLabel.font = UIFont.systemFontOfSize(16)
+        textLabel.font = UIFont.systemFont(ofSize: 16)
         textLabel.textColor = UIColor.init(white: 1, alpha: 0.9)
-        textLabel.textAlignment = .Center
+        textLabel.textAlignment = .center
         textLabel.center = CGPoint.init(x: lightRedPart.center.x, y: lightRedPart.center.y + 2)
         addSubview(textLabel)
     }
     
     func start() {
-        UIView.animateWithDuration(2) {
+
+        UIView.animate(withDuration: 2) {
             self.paper.frame = CGRect.init(x: (self.frame.width - 146) / 2, y: 35, width: 146, height: 75)
+
         }
+        
         switch mode {
         case .Bar:
             for item in bars {
-                UIView.animateWithDuration(2, animations: {
+                
+                UIView.animate(withDuration: 2) {
                     let paperBar = item as! FNPaperBar
                     paperBar.start()
                     paperBar.frame = CGRect.init(x: paperBar.frame.origin.x, y: 146, width: paperBar.frame.width, height: paperBar.frame.height)
-                })
+
+                }
             }
         default:
             let delayInSeconds = 0.5
-            let popTime = dispatch_time(DISPATCH_TIME_NOW,
-                                        Int64(delayInSeconds * Double(NSEC_PER_SEC)))
-            dispatch_after(popTime, dispatch_get_main_queue()) {
+//            let popTime = dispatch_time(DISPATCH_TIME_NOW,Int64(delayInSeconds * Double(NSEC_PER_SEC)))
+//            dispatch_after(popTime, dispatch_get_main_queue()) {
+//            }
+            DispatchQueue.main.asyncAfter(deadline: .now()+delayInSeconds * Double(NSEC_PER_SEC)) {
                 self.paperPieceFaller.fn_fallPaperPiece()
             }
         }
@@ -92,7 +98,7 @@ class FNPaperShredder: UIView {
     
     func reset(animate:Bool) {
         if animate {
-            UIView.animateWithDuration(2) {
+            UIView.animate(withDuration: 2) {
                 self.paper.frame = CGRect.init(x: (self.frame.width - 146) / 2, y: 0, width: 146, height: 75)
             }
         }
@@ -107,10 +113,10 @@ class FNPaperShredder: UIView {
             }
             if animate {
                 for item in bars {
-                    UIView.animateWithDuration(2, animations: {
+                    UIView.animate(withDuration: 2) {
                         let paperBar = item as! FNPaperBar
                         paperBar.frame = CGRect.init(x: paperBar.frame.origin.x, y: 146 - 50, width: paperBar.frame.width, height: paperBar.frame.height)
-                    })
+                    }
                 }
             }
             else {
@@ -121,6 +127,7 @@ class FNPaperShredder: UIView {
             }
         default:
             let i = 0
+            print(i)
         }
     }
     

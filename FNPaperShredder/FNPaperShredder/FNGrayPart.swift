@@ -13,18 +13,18 @@ class FNGrayPart: UIView {
         super.init(frame: frame)
         
         let bezierPath = UIBezierPath.init();
-        bezierPath.moveToPoint(CGPointMake(frame.width / 2, 0))
-        bezierPath.addLineToPoint(CGPointMake(2, 0))
-        bezierPath.addQuadCurveToPoint(CGPointMake(0, 2), controlPoint: CGPointMake(0, 0))
-        bezierPath.addLineToPoint(CGPointMake(0, frame.height * 0.7))
-        bezierPath.addQuadCurveToPoint(CGPointMake(6, frame.height), controlPoint: CGPointMake(2, frame.height))
-        bezierPath.addLineToPoint(CGPointMake(frame.width - 6, frame.height))
-        bezierPath.addQuadCurveToPoint(CGPointMake(frame.width, frame.height * 0.7), controlPoint: CGPointMake(frame.width - 2, frame.height))
-        bezierPath.addLineToPoint(CGPointMake(frame.width, 2))
-        bezierPath.addQuadCurveToPoint(CGPointMake(frame.width - 2, 0), controlPoint: CGPointMake(frame.width, 0))
-        bezierPath.closePath()
+        bezierPath.move(to: CGPoint.init(x: frame.width / 2, y: 0))
+        bezierPath.addLine(to: CGPoint.init(x: 2, y: 0))
+        bezierPath.addQuadCurve(to: CGPoint.init(x: 0, y: 2), controlPoint: CGPoint.init(x: 0, y: 0))
+        bezierPath.addLine(to: CGPoint.init(x: 2, y: frame.height * 0.7))
+        bezierPath.addQuadCurve(to: CGPoint.init(x: 6, y: frame.height), controlPoint: CGPoint.init(x: 2, y: frame.height))
+        bezierPath.addLine(to: CGPoint.init(x: frame.width - 6, y: frame.height))
+        bezierPath.addQuadCurve(to: CGPoint.init(x: frame.width, y: frame.height * 0.7), controlPoint: CGPoint.init(x: frame.width - 2, y: frame.height))
+        bezierPath.addLine(to: CGPoint.init(x: frame.width, y: 2))
+        bezierPath.addQuadCurve(to: CGPoint.init(x: frame.width - 2, y: 0), controlPoint: CGPoint.init(x: frame.width, y: 0))
+        bezierPath.close()
         let maskLayer = CAShapeLayer.init()
-        maskLayer.path = bezierPath.CGPath
+        maskLayer.path = bezierPath.cgPath
         self.layer.mask = maskLayer
     }
     

@@ -9,8 +9,8 @@
 import UIKit
 
 class FNPaperBar: UIView {
-    var maskLayer:CAShapeLayer!
-    var displaylink:CADisplayLink?
+    @objc var maskLayer:CAShapeLayer!
+    @objc var displaylink:CADisplayLink?
     var beginTime:CFTimeInterval?
     var startHeight0:CGFloat!
     var endHeight0:CGFloat!
@@ -25,7 +25,7 @@ class FNPaperBar: UIView {
     var horizontalDistant11:CGFloat!
     var horizontalDistant12:CGFloat!
     
-    var isResetting = false
+    @objc var isResetting = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,13 +38,14 @@ class FNPaperBar: UIView {
         horizontalDistant02 = (CGFloat(arc4random_uniform(100))/100.0 * 2 - 1) * 5
         
         let bezierPath = UIBezierPath.init();
-        bezierPath.moveToPoint(CGPointMake(4, 0))
-        bezierPath.addCurveToPoint(CGPointMake(4 + horizontalDistant02, finalHeight0), controlPoint1: CGPointMake(4 + horizontalDistant00, startHeight0), controlPoint2: CGPointMake(4 + horizontalDistant01, endHeight0))
-        bezierPath.addLineToPoint(CGPointMake(12 + horizontalDistant02, finalHeight0))
-        bezierPath.addCurveToPoint(CGPointMake(12, 0), controlPoint1: CGPointMake(12 + horizontalDistant01, endHeight0), controlPoint2: CGPointMake(12 + horizontalDistant00, startHeight0))
-        bezierPath.closePath()
+        bezierPath.move(to: CGPoint.init(x: 4, y: 0))
+        bezierPath.addCurve(to: CGPoint.init(x: 4 + horizontalDistant02, y: finalHeight0), controlPoint1: CGPoint.init(x: 4 + horizontalDistant00, y: startHeight0), controlPoint2: CGPoint.init(x: 4 + horizontalDistant01, y: endHeight0))
+        bezierPath.addLine(to: CGPoint.init(x: 12 + horizontalDistant02, y: finalHeight0))
+        bezierPath.addCurve(to: CGPoint.init(x: 12, y: 0), controlPoint1: CGPoint.init(x: 12 + horizontalDistant01, y: endHeight0), controlPoint2: CGPoint.init(x: 12 + horizontalDistant00, y: startHeight0))
+
+        bezierPath.close()
         maskLayer = CAShapeLayer.init()
-        maskLayer.path = bezierPath.CGPath
+        maskLayer.path = bezierPath.cgPath
         self.layer.mask = maskLayer
         
         startHeight1 = CGFloat(arc4random_uniform(50))/100.0 * frame.height
@@ -57,25 +58,25 @@ class FNPaperBar: UIView {
         initDisplayLink()
     }
     
-    func initDisplayLink() {
+    @objc func initDisplayLink() {
         displaylink = CADisplayLink.init(target: self, selector: #selector(updateView))
-        displaylink?.paused = false
-        displaylink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+        displaylink?.isPaused = false
+        displaylink?.add(to: RunLoop.current, forMode: .commonModes)
     }
     
-    func start() {
+    @objc func start() {
         isResetting = false
         beginTime = CACurrentMediaTime()
-        displaylink?.paused = false
+        displaylink?.isPaused = false
     }
     
-    func reset() {
+    @objc func reset() {
         isResetting = true
         beginTime = CACurrentMediaTime()
-        displaylink?.paused = false
+        displaylink?.isPaused = false
     }
     
-    func updateView() {
+    @objc func updateView() {
         if beginTime == nil {
             return
         }
@@ -93,17 +94,17 @@ class FNPaperBar: UIView {
             let finalHeight = finalHeight0 + (finalHeight1 - finalHeight0) * CGFloat(progress)
             
             let bezierPath = UIBezierPath.init();
-            bezierPath.moveToPoint(CGPointMake(4, 0))
-            bezierPath.addCurveToPoint(CGPointMake(4 + horizontalDistant2, finalHeight), controlPoint1: CGPointMake(4 + horizontalDistant0, startHeight), controlPoint2: CGPointMake(4 + horizontalDistant1, endHeight))
-            bezierPath.addLineToPoint(CGPointMake(12 + horizontalDistant2, finalHeight))
-            bezierPath.addCurveToPoint(CGPointMake(12, 0), controlPoint1: CGPointMake(12 + horizontalDistant1, endHeight), controlPoint2: CGPointMake(12 + horizontalDistant0, startHeight))
-            bezierPath.closePath()
+            bezierPath.move(to: CGPoint.init(x: 4, y: 0))
+            bezierPath.addCurve(to: CGPoint.init(x: 4 + horizontalDistant2, y: finalHeight), controlPoint1: CGPoint.init(x: 4 + horizontalDistant0, y: startHeight), controlPoint2: CGPoint.init(x: 4 + horizontalDistant1, y: endHeight))
+            bezierPath.addLine(to: CGPoint.init(x: 12 + horizontalDistant2, y: finalHeight))
+            bezierPath.addCurve(to: CGPoint.init(x: 12, y: 0), controlPoint1: CGPoint.init(x: 12 + horizontalDistant1, y: endHeight), controlPoint2: CGPoint.init(x: 12 + horizontalDistant0, y: startHeight))
+            bezierPath.close()
             maskLayer = CAShapeLayer.init()
-            maskLayer.path = bezierPath.CGPath
+            maskLayer.path = bezierPath.cgPath
             self.layer.mask = maskLayer
         }
         else if CACurrentMediaTime() - beginTime! > 2 {
-            displaylink?.paused = true
+            displaylink?.isPaused = true
         }
     }
     
